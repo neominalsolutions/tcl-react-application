@@ -1,4 +1,3 @@
-import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
 // Not: Short Cut -> Sol menu kapatmak için: Ctrl + B
@@ -15,15 +14,18 @@ import { createRoot } from 'react-dom/client';
 // export = public
 // import ise local klasör altındaki ts dosyaların çağırılması veya npm üzerinden yüklenen dosyaların çağırılması ve kullanılması için kullanılır.
 // Terminal içerisindeki kodlar -> npm run dev -> Development serve -> npm run build -> prod ortam js derlenmiş hali
+
+import React from 'react';
+
 // Production build dist klasörüne atılır.
 export const App: React.FC = () => {
 	// value = {value} -> model binding
 	const [value, setValue] = React.useState<string>('Hello, World React!'); // ekrana render aşmasında basılacak olan ilk değer.
 
-	console.log('rendering...');
+	console.log('app rendering...');
 
 	React.useEffect(() => {
-		console.log('mounting');
+		console.log('app mounting');
 	}, []); // component mount olduğunda sadece 1 kez tetiklenir. Component unmount olana kadar bir daha tetiklenmez.[] herhangi bir state takibi yok.
 
 	// const user: User = { email: 'test@test.com' };
@@ -31,20 +33,67 @@ export const App: React.FC = () => {
 
 	// butonu tıklayınca çalışacak fonksiyon -> event binding
 	const handleClick = () => {
-		setValue('Button Clicked 2!');
+		setValue((Math.random() * 100).toString());
 	};
+
+	// yani props değerim güncellenmezse yeni re-render etmeyebilirim.
 
 	return (
 		<div>
 			<h1>{value}</h1>
 			<button onClick={handleClick}>Click Me</button>
+			<hr></hr>
+			<TButton text="Button1" onButtonClick={handleClick} />
+			{/* TBotton Child Component, App ise Parent Component */}
+			<TButton
+				styles={{ color: 'red', padding: '5px', backgroundColor: 'blue' }}
+				text="Button2"
+				onButtonClick={handleClick}
+			/>
 		</div>
 	);
 };
 
+// UI Custom Button Component
+// + APP
+// + TButton -> Tree
+
+// type ise component özgü tanımlanan bir model
+type TButtonProps = {
+	text: string; // required -> string,boolean,number -> primative type -> value change
+	onButtonClick?: () => void; // ? olmadığında bu değer required
+	styles?: React.CSSProperties; // stil işlemleri için -> stil gönderme ? opsiyonel
+};
+// Props -> Componente dışarıdan gönderilen özellikler. Component  bu özellikler ile belirli davranışlar gösterir..
+export function TButton(props: TButtonProps) {
+	// TButton component name ->  props -> Component properties
+
+	console.log('child rendering...');
+
+	React.useEffect(() => {
+		console.log('child mouting');
+		return () => {
+			// clean up function -> component domdan çıkarken tetiklenir.
+			console.log('child unmounting');
+		};
+	}, []); // [] tek sefer tetiklenmeyi sağlar.
+
+	return (
+		<>
+			<button onClick={props.onButtonClick} style={props.styles}>
+				{props.text}
+			</button>
+		</>
+	);
+}
+
+//<> Fragment ile return edilecek elementler wraplenir. (sarmallanır.)
+// Parent APP -> Child Component TButton
+// Parent Component Child Component Nasıl Render eder ? Component Props Nedir ?
+
 // 2. kısım ReactJS Phases -> Component Lifecyles.
 createRoot(document.getElementById('root')!).render(
-	<StrictMode>
+	<>
 		<App />
-	</StrictMode>
+	</>
 ); // Artık div id root içerisinde APP componenti içindeki return ifadesinin görselini render et.
