@@ -51,25 +51,28 @@ const footerStyle: React.CSSProperties = {
 export const SiteLayout: React.FC = () => {
 	type MenuItem = Required<MenuProps>['items'][number];
 
+	// tekli olunca key kendini değer olarak key değeri olarak döndürür ama children yani altmenu varsa alt menu key döndürür.
 	const items: MenuItem[] = [
 		{
 			key: '1',
 			icon: <PlusCircleOutlined />,
 			label: 'Makaleler',
 			children: [
-				{ key: '1.2', label: 'Makale Listesi' },
-				{ key: '1.3', label: 'Makale Listesi-2' },
+				{ key: '/posts', label: 'Makale Listesi' },
+				{ key: '/posts-v2', label: 'Makale Listesi-V2' },
 			],
-			onClick: () => {
+			onClick: ({ key }) => {
 				// linke yönlen
+				console.log('key', key);
 			},
 		},
 		{
-			key: '2',
+			key: '/users',
 			icon: <UserOutlined />,
 			label: 'Kullanıcılar',
-			onClick: () => {
+			onClick: ({ key }) => {
 				// like yönlen
+				console.log('key', key);
 			},
 		},
 	];
@@ -80,8 +83,8 @@ export const SiteLayout: React.FC = () => {
 				<Sider width="20%" style={siderStyle}>
 					<Menu
 						mode="vertical"
-						theme="dark"
-						inlineCollapsed={true}
+						style={{ padding: 10, margin: 20 }}
+						inlineCollapsed={false}
 						items={items}
 					/>
 				</Sider>
