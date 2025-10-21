@@ -1,6 +1,7 @@
 import type { RouteObject } from 'react-router';
 import SiteLayout from '../layouts/site/layout';
 import App from '../App';
+import PostPage from '../pages/posts/page';
 // route config dosyası, sadece route tanımı yaparız.
 const mainRoutes: RouteObject = {
 	path: '/',
@@ -12,7 +13,7 @@ const mainRoutes: RouteObject = {
 		},
 		{
 			path: '/posts',
-			element: <>Makaleler</>,
+			Component: PostPage,
 		},
 		{
 			path: '/posts-v2',
