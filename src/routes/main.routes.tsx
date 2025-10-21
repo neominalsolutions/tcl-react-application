@@ -2,6 +2,7 @@ import type { RouteObject } from 'react-router';
 import SiteLayout from '../layouts/site/layout';
 import App from '../App';
 import PostPage from '../pages/posts/page';
+import PostComments from '../pages/posts/[id]/comments/page';
 // route config dosyası, sadece route tanımı yaparız.
 const mainRoutes: RouteObject = {
 	path: '/',
@@ -22,6 +23,10 @@ const mainRoutes: RouteObject = {
 		{
 			path: '/users',
 			element: <>Users Page</>, // element diyince return
+		},
+		{
+			path: '/posts/:id/comments',
+			Component: PostComments,
 		},
 	],
 };

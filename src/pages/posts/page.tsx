@@ -13,6 +13,7 @@ import {
 import type { FilterDropdownProps } from 'antd/es/table/interface';
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
+import { Link } from 'react-router';
 
 // Not: npm i sadece yetmiyor
 // Not: npm i @types/react-highlight-words indirmemiz gerekiyor.
@@ -190,11 +191,24 @@ function PostPage() {
 			sorter: (a, b) => a.body.length - b.body.length,
 			sortDirections: ['descend', 'ascend'],
 		},
+		{
+			title: 'Comments',
+			key: 'action',
+			render(value, record, index) {
+				return (
+					<>
+						<Link key={index} to={`/posts/${record.id}/comments`}>
+							Makale Yorumları
+						</Link>
+					</>
+				);
+			},
+		},
 	];
 
 	return (
 		<>
-			<div style={{ padding: 5 }}>
+			<div style={{ padding: 50 }}>
 				{/* <p>Search Input {searchedColumn}</p>
 				<p>Filtreleme Sayısı: {filterCountRef.current}</p> */}
 				<Table<PostModel>
