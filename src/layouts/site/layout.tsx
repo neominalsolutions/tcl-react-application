@@ -19,7 +19,6 @@ const headerStyle: React.CSSProperties = {
 	paddingInline: 48,
 	lineHeight: '64px',
 	width: '100',
-	border: '1px solid white',
 	borderColor: '0958d9',
 	backgroundColor: 'rgb(13 42 91)',
 };
