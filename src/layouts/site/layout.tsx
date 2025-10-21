@@ -5,6 +5,7 @@ import { PlusCircleOutlined, UserOutlined } from '@ant-design/icons';
 import { Layout, Menu, type MenuProps } from 'antd';
 import { Content, Footer, Header } from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider';
+import { Outlet, useNavigate } from 'react-router';
 
 const layoutStyle = {
 	padding: 5,
@@ -49,9 +50,17 @@ const footerStyle: React.CSSProperties = {
 };
 
 export const SiteLayout: React.FC = () => {
+	// button click sonrası sayfa redirect işlemlerinden sorumlu özel function, hook.
+	// func componentlerde component içerisi bir çok durum yönetim hook değimiz, özel functionlar ile yazılıyor.
+	// hooklar componente fonkisyonellik kazandıran kod parçacıkları.
+	// yönlendirme yapma hook
+	const navigate = useNavigate();
+
 	type MenuItem = Required<MenuProps>['items'][number];
 
 	// tekli olunca key kendini değer olarak key değeri olarak döndürür ama children yani altmenu varsa alt menu key döndürür.
+	// useNavigate hook -> menü ve button component ile çok sık kullanılır.
+	// kayıttan sonra yönlendir senaryoları için useNavigate çok ideal.
 	const items: MenuItem[] = [
 		{
 			key: '1',
@@ -64,6 +73,7 @@ export const SiteLayout: React.FC = () => {
 			onClick: ({ key }) => {
 				// linke yönlen
 				console.log('key', key);
+				navigate(key);
 			},
 		},
 		{
@@ -73,6 +83,7 @@ export const SiteLayout: React.FC = () => {
 			onClick: ({ key }) => {
 				// like yönlen
 				console.log('key', key);
+				navigate(key);
 			},
 		},
 	];
@@ -90,7 +101,10 @@ export const SiteLayout: React.FC = () => {
 				</Sider>
 				<Layout>
 					<Header style={headerStyle}>Header</Header>
-					<Content style={contentStyle}>Content</Content>
+					<Content style={contentStyle}>
+						<Outlet />
+						{/* Page Componentler bu kısma girip çıkıcak route ile açılacak componentleri işaretlediğimiz yer. */}
+					</Content>
 					<Footer style={footerStyle}>Footer</Footer>
 				</Layout>
 			</Layout>
