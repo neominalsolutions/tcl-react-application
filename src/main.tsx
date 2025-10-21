@@ -16,6 +16,7 @@ import { createRoot } from 'react-dom/client';
 // Terminal içerisindeki kodlar -> npm run dev -> Development serve -> npm run build -> prod ortam js derlenmiş hali
 
 import React from 'react';
+import SiteLayout from './layouts/site/layout';
 
 // Production build dist klasörüne atılır.
 export const App: React.FC = () => {
@@ -37,19 +38,23 @@ export const App: React.FC = () => {
 	};
 
 	// yani props değerim güncellenmezse yeni re-render etmeyebilirim.
-
+	{
+		/* TBotton Child Component, App ise Parent Component */
+	}
 	return (
 		<div>
-			<h1>{value}</h1>
+			{/* <h1>{value}</h1>
 			<button onClick={handleClick}>Click Me</button>
 			<hr></hr>
 			<TButton text="Button1" onButtonClick={handleClick} />
-			{/* TBotton Child Component, App ise Parent Component */}
+		
 			<TButton
 				styles={{ color: 'red', padding: '5px', backgroundColor: 'blue' }}
 				text="Button2"
 				onButtonClick={handleClick}
-			/>
+			/> */}
+
+			<SiteLayout />
 		</div>
 	);
 };
