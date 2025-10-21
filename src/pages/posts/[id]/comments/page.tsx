@@ -4,6 +4,7 @@ import type { CommentModel } from '../../../../model/comment.model';
 import { Avatar, Col, List, Row, Spin, Typography } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Header } from 'antd/es/layout/layout';
+import { getCommentsByPostId } from '../../../../services/post.client';
 
 function PostComments() {
 	// :id -> dinamik değer ile eşleşeni döndürür.
@@ -23,8 +24,7 @@ function PostComments() {
 	React.useEffect(() => {
 		// biz simüle ettik.
 		setTimeout(() => {
-			fetch(`https://jsonplaceholder.typicode.com/posts/${params.id}/comments`)
-				.then((response) => response.json())
+			getCommentsByPostId(Number(params.id))
 				.then((data) => {
 					setCommentsState(data);
 					console.log('data', data);
@@ -32,7 +32,7 @@ function PostComments() {
 				.finally(() => {
 					setLoading(false);
 				});
-		}, 5000);
+		}, 1000);
 	}, []);
 
 	// koşullu render alma
