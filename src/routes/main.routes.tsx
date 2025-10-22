@@ -3,6 +3,7 @@ import SiteLayout from '../layouts/site/layout';
 import App from '../App';
 import PostPage from '../pages/posts/page';
 import PostComments from '../pages/posts/[id]/comments/page';
+import { AuthGuard } from '../guards/auth.guard';
 // route config dosyası, sadece route tanımı yaparız.
 const mainRoutes: RouteObject = {
 	path: '/',
@@ -13,8 +14,12 @@ const mainRoutes: RouteObject = {
 			Component: App,
 		},
 		{
-			path: '/posts',
-			Component: PostPage,
+			path: '/posts', // oturum açmayan sayfaya erişimez kontrolü yapmış olduk.
+			element: (
+				<AuthGuard>
+					<PostPage />
+				</AuthGuard>
+			),
 		},
 		{
 			path: '/posts-v2',
@@ -27,6 +32,10 @@ const mainRoutes: RouteObject = {
 		{
 			path: '/posts/:id/comments',
 			Component: PostComments,
+		},
+		{
+			path: '/unauthorize',
+			element: <>Bu Sayfaya giriş yetkiniz kısıtlı !</>,
 		},
 	],
 };
