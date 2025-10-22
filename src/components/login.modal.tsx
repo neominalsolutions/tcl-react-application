@@ -1,4 +1,9 @@
 import { Button, Form, Input, Modal } from 'antd';
+import { useContext } from 'react';
+import {
+	SessionContext,
+	type SessionContextType,
+} from '../contexts/session.context';
 
 type LoginModalProps = {
 	open: boolean;
@@ -9,6 +14,7 @@ function LoginModal(props: LoginModalProps) {
 	// and gelen bir form hook. formlar ile çalışmamızı sağlar
 	// form instance değişkeni.
 	const [loginForm] = Form.useForm();
+	const { signIn } = useContext(SessionContext) as SessionContextType;
 
 	return (
 		<>
@@ -27,17 +33,19 @@ function LoginModal(props: LoginModalProps) {
 						// Formun submit olduğunu yakaladığımız event, values form bilgilerini submit sonrası aldık.
 						// api post işlemi yapılacak.
 						console.log('formData', values);
+
+						// session state başlat
+						signIn('x343434');
 					}}
 				>
-					<Form.Item
-						name="username"
-						labelAlign="left"
-						label="User Name"
-						rules={[{ required: true, message: 'Please input your password!' }]}
-					>
+					<Form.Item name="username" labelAlign="left" label="User Name">
 						<Input />
 					</Form.Item>
-					<Form.Item name="password" label="Password">
+					<Form.Item
+						name="password"
+						label="Password"
+						rules={[{ required: true, message: 'Please input your password!' }]}
+					>
 						<Input.Password />
 					</Form.Item>
 					<Form.Item>

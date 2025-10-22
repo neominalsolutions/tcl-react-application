@@ -1,6 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import mainRoutes from './routes/main.routes';
+import type React from 'react';
 
 // Artık div id root içerisinde APP componenti içindeki return ifadesinin görselini render et.
 
@@ -14,5 +15,26 @@ createRoot(document.getElementById('root')!).render(
 		<RouterProvider router={router} />
 	</>
 );
+
+// Not: React children kavramı
+// react da özel bir isim
+type DemoWrapperProps = { children: React.ReactNode }; // jsx formatında herhangi bir element olabilir.
+
+export const DemoWrapper = (props: DemoWrapperProps) => {
+	return <>{props.children}</>;
+};
+
+export const DemoChild = () => {
+	return <>DemoChild</>;
+};
+
+export const DemoApp = () => {
+	return (
+		<DemoWrapper>
+			<DemoChild />
+			<p>Deneme1</p>
+		</DemoWrapper>
+	);
+};
 
 // <RouterProvider router={router} /> -> uygulama kodlarını route config dosyaları üzerinden çalışıtır.
