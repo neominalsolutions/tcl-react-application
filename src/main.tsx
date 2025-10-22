@@ -2,6 +2,7 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import mainRoutes from './routes/main.routes';
 import type React from 'react';
+import { SessionProvider } from './contexts/session.context';
 
 // Artık div id root içerisinde APP componenti içindeki return ifadesinin görselini render et.
 
@@ -12,7 +13,9 @@ const router = createBrowserRouter([mainRoutes]);
 
 createRoot(document.getElementById('root')!).render(
 	<>
-		<RouterProvider router={router} />
+		<SessionProvider>
+			<RouterProvider router={router} />
+		</SessionProvider>
 	</>
 );
 

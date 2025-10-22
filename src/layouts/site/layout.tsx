@@ -1,13 +1,21 @@
 // servis katmanında herbir servis functiona özel export yazarız. import {serviceA,serviceB} = from './services';
 // import SiteLayout from './layout.tsx'
 
-import { PlusCircleOutlined, UserOutlined } from '@ant-design/icons';
-import { Col, Layout, Menu, Row, Space, type MenuProps } from 'antd';
+import {
+	DownOutlined,
+	PlusCircleOutlined,
+	UserOutlined,
+} from '@ant-design/icons';
+import { Col, Dropdown, Layout, Menu, Row, Space, type MenuProps } from 'antd';
 import { Content, Footer, Header } from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Outlet, useNavigate } from 'react-router';
 import LoginModal from '../../components/login.modal';
+import {
+	SessionContext,
+	type SessionContextType,
+} from '../../contexts/session.context';
 
 const layoutStyle = {
 	padding: 5,
@@ -51,15 +59,17 @@ const footerStyle: React.CSSProperties = {
 };
 
 export const SiteLayout: React.FC = () => {
+	// modal aç veya kapa state
+	const [visibleLoginModal, setVisibleLoginModal] =
+		React.useState<boolean>(false);
+
+	const { state } = useContext(SessionContext) as SessionContextType;
+
 	// button click sonrası sayfa redirect işlemlerinden sorumlu özel function, hook.
 	// func componentlerde component içerisi bir çok durum yönetim hook değimiz, özel functionlar ile yazılıyor.
 	// hooklar componente fonkisyonellik kazandıran kod parçacıkları.
 	// yönlendirme yapma hook
 	const navigate = useNavigate();
-
-	// modal aç veya kapa state
-	const [visibleLoginModal, setVisibleLoginModal] =
-		React.useState<boolean>(false);
 
 	type MenuItem = Required<MenuProps>['items'][number];
 
@@ -130,21 +140,25 @@ export const SiteLayout: React.FC = () => {
 						<Row>
 							<Col span={18}></Col>
 							<Col span={6} style={{ textAlign: 'right' }}>
-								<Space
-									onClick={() => setVisibleLoginModal(true)}
-									style={{ padding: 5, cursor: 'pointer' }}
-								>
-									Oturum Aç
-								</Space>
-
-								{/* <Dropdown menu={{ items: profileItems }}>
-									<a onClick={(e) => e.preventDefault()}>
-										<Space>
-											ME
-											<DownOutlined />
-										</Space>
-									</a>
-								</Dropdown> */}
+								{!state.isAuthenticated && (
+									<Space
+										onClick={() => setVisibleLoginModal(true)}
+										style={{ padding: 5, cursor: 'pointer' }}
+									>
+										Oturum Aç
+									</Space>
+								)}
+								{state.isAuthenticated && ( // oturum açmışsak burası görünsün.
+									<Dropdown menu={{ items: profileItems }}>
+										<a onClick={(e) => e.preventDefault()}>
+											<Space>
+												{state.sub}
+												{/* oturum açan kişinin bilgisi */}
+												<DownOutlined />
+											</Space>
+										</a>
+									</Dropdown>
+								)}
 							</Col>
 						</Row>
 					</Header>
