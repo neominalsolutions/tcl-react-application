@@ -63,7 +63,7 @@ export const SiteLayout: React.FC = () => {
 	const [visibleLoginModal, setVisibleLoginModal] =
 		React.useState<boolean>(false);
 
-	const { state } = useContext(SessionContext) as SessionContextType;
+	const { state, signOut } = useContext(SessionContext) as SessionContextType;
 
 	// button click sonrası sayfa redirect işlemlerinden sorumlu özel function, hook.
 	// func componentlerde component içerisi bir çok durum yönetim hook değimiz, özel functionlar ile yazılıyor.
@@ -108,11 +108,21 @@ export const SiteLayout: React.FC = () => {
 			key: 'profile',
 			label: 'Profile',
 			extra: '⌘P',
+			onClick: ({ key }) => {
+				// linke yönlen
+				console.log('key', key);
+				navigate(key);
+			},
 		},
 		{
 			key: 'admin',
 			label: 'Admin',
 			disabled: true,
+			onClick: ({ key }) => {
+				// linke yönlen
+				console.log('key', key);
+				navigate(key);
+			},
 		},
 		{
 			type: 'divider',
@@ -121,8 +131,17 @@ export const SiteLayout: React.FC = () => {
 			key: 'logout',
 			label: 'Logout',
 			extra: '⌘B',
+			onClick: () => {
+				// linke yönlen
+				signOut();
+			},
 		},
 	];
+
+	// // eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// const onProfileMenuClick = ({ key }:{key:any}) => {
+	// 	console.log('key', key);
+	// };
 
 	return (
 		<>
@@ -150,7 +169,7 @@ export const SiteLayout: React.FC = () => {
 								)}
 								{state.isAuthenticated && ( // oturum açmışsak burası görünsün.
 									<Dropdown menu={{ items: profileItems }}>
-										<a onClick={(e) => e.preventDefault()}>
+										<a>
 											<Space>
 												{state.sub}
 												{/* oturum açan kişinin bilgisi */}
