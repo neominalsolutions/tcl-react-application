@@ -2,10 +2,12 @@
 // import SiteLayout from './layout.tsx'
 
 import { PlusCircleOutlined, UserOutlined } from '@ant-design/icons';
-import { Layout, Menu, type MenuProps } from 'antd';
+import { Col, Layout, Menu, Row, Space, type MenuProps } from 'antd';
 import { Content, Footer, Header } from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider';
+import React from 'react';
 import { Outlet, useNavigate } from 'react-router';
+import LoginModal from '../../components/login.modal';
 
 const layoutStyle = {
 	padding: 5,
@@ -55,6 +57,10 @@ export const SiteLayout: React.FC = () => {
 	// yönlendirme yapma hook
 	const navigate = useNavigate();
 
+	// modal aç veya kapa state
+	const [visibleLoginModal, setVisibleLoginModal] =
+		React.useState<boolean>(false);
+
 	type MenuItem = Required<MenuProps>['items'][number];
 
 	// tekli olunca key kendini değer olarak key değeri olarak döndürür ama children yani altmenu varsa alt menu key döndürür.
@@ -87,6 +93,27 @@ export const SiteLayout: React.FC = () => {
 		},
 	];
 
+	const profileItems: MenuProps['items'] = [
+		{
+			key: 'profile',
+			label: 'Profile',
+			extra: '⌘P',
+		},
+		{
+			key: 'admin',
+			label: 'Admin',
+			disabled: true,
+		},
+		{
+			type: 'divider',
+		},
+		{
+			key: 'logout',
+			label: 'Logout',
+			extra: '⌘B',
+		},
+	];
+
 	return (
 		<>
 			<Layout style={layoutStyle}>
@@ -99,13 +126,39 @@ export const SiteLayout: React.FC = () => {
 					/>
 				</Sider>
 				<Layout>
-					<Header style={headerStyle}>Header</Header>
+					<Header style={headerStyle}>
+						<Row>
+							<Col span={18}></Col>
+							<Col span={6} style={{ textAlign: 'right' }}>
+								<Space
+									onClick={() => setVisibleLoginModal(true)}
+									style={{ padding: 5, cursor: 'pointer' }}
+								>
+									Oturum Aç
+								</Space>
+
+								{/* <Dropdown menu={{ items: profileItems }}>
+									<a onClick={(e) => e.preventDefault()}>
+										<Space>
+											ME
+											<DownOutlined />
+										</Space>
+									</a>
+								</Dropdown> */}
+							</Col>
+						</Row>
+					</Header>
 					<Content style={contentStyle}>
 						<Outlet />
 						{/* Page Componentler bu kısma girip çıkıcak route ile açılacak componentleri işaretlediğimiz yer. */}
 					</Content>
 					<Footer style={footerStyle}>Footer</Footer>
 				</Layout>
+
+				<LoginModal
+					open={visibleLoginModal}
+					dissmiss={() => setVisibleLoginModal(false)}
+				/>
 			</Layout>
 		</>
 	);
