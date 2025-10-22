@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // servis katmanında herbir servis functiona özel export yazarız. import {serviceA,serviceB} = from './services';
 // import SiteLayout from './layout.tsx'
 
@@ -9,7 +10,7 @@ import {
 import { Col, Dropdown, Layout, Menu, Row, Space, type MenuProps } from 'antd';
 import { Content, Footer, Header } from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router';
 import LoginModal from '../../components/login.modal';
 import {
@@ -62,14 +63,9 @@ export const SiteLayout: React.FC = () => {
 	// modal aç veya kapa state
 	const [visibleLoginModal, setVisibleLoginModal] =
 		React.useState<boolean>(false);
+	const [filteredItems, setFilteredItems] = useState<any[]>([]);
 
 	const { state, signOut } = useContext(SessionContext) as SessionContextType;
-
-	// button click sonrası sayfa redirect işlemlerinden sorumlu özel function, hook.
-	// func componentlerde component içerisi bir çok durum yönetim hook değimiz, özel functionlar ile yazılıyor.
-	// hooklar componente fonkisyonellik kazandıran kod parçacıkları.
-	// yönlendirme yapma hook
-	const navigate = useNavigate();
 
 	type MenuItem = Required<MenuProps>['items'][number];
 
@@ -92,7 +88,7 @@ export const SiteLayout: React.FC = () => {
 			},
 		},
 		{
-			key: '/users',
+			key: '2',
 			icon: <UserOutlined />,
 			label: 'Kullanıcılar',
 			onClick: ({ key }) => {
@@ -102,6 +98,26 @@ export const SiteLayout: React.FC = () => {
 			},
 		},
 	];
+
+	React.useEffect(() => {
+		if (state.isAuthenticated) {
+			// [... arr] yada {... obj} js de bir spread operatörü görüve görür. ve obje referanslarını koparır.
+			setFilteredItems([...items]);
+		} else {
+			const arr = items.filter((x) => x?.key !== '1');
+			console.log('filtered-items', arr);
+			setFilteredItems(arr);
+			// sıfırdan yepyeni bir dizi referansı verdik.
+		}
+
+		console.log('state-changed', state);
+	}, [state]); // state değişimin takip ettik. React da çok yaparız.
+
+	// button click sonrası sayfa redirect işlemlerinden sorumlu özel function, hook.
+	// func componentlerde component içerisi bir çok durum yönetim hook değimiz, özel functionlar ile yazılıyor.
+	// hooklar componente fonkisyonellik kazandıran kod parçacıkları.
+	// yönlendirme yapma hook
+	const navigate = useNavigate();
 
 	const profileItems: MenuProps['items'] = [
 		{
@@ -138,6 +154,8 @@ export const SiteLayout: React.FC = () => {
 		},
 	];
 
+	console.log('items', items);
+
 	// // eslint-disable-next-line @typescript-eslint/no-explicit-any
 	// const onProfileMenuClick = ({ key }:{key:any}) => {
 	// 	console.log('key', key);
@@ -151,7 +169,7 @@ export const SiteLayout: React.FC = () => {
 						mode="vertical"
 						style={{ padding: 10, margin: 20 }}
 						inlineCollapsed={false}
-						items={items}
+						items={filteredItems}
 					/>
 				</Sider>
 				<Layout>

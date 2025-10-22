@@ -36,6 +36,7 @@ function LoginModal(props: LoginModalProps) {
 
 						// session state başlat
 						signIn('x343434');
+						props.dissmiss();
 					}}
 				>
 					<Form.Item name="username" labelAlign="left" label="User Name">
