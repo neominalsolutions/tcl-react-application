@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { SessionReducer } from './slices/session.slice';
+import { PostReducer } from './slices/posts.slice';
 // ...
 
 export const store = configureStore({
 	reducer: {
 		sessionState: SessionReducer, // son olarak state store tanıttık.
+		postState: PostReducer,
 	},
 });
 

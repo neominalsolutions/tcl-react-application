@@ -4,6 +4,7 @@ import App from '../App';
 import PostPage from '../pages/posts/page';
 import PostComments from '../pages/posts/[id]/comments/page';
 import { AuthGuard } from '../guards/auth.guard';
+import PostV2Page from '../pages/posts/page.v2';
 // route config dosyası, sadece route tanımı yaparız.
 const mainRoutes: RouteObject = {
 	path: '/',
@@ -23,7 +24,7 @@ const mainRoutes: RouteObject = {
 		},
 		{
 			path: '/posts-v2',
-			element: <>Makaler V2</>, // Outlet girecek olan kısımlar
+			Component: PostV2Page, // Outlet girecek olan kısımlar
 		},
 		{
 			path: '/users',
