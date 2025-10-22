@@ -10,13 +10,12 @@ import {
 import { Col, Dropdown, Layout, Menu, Row, Space, type MenuProps } from 'antd';
 import { Content, Footer, Header } from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router';
 import LoginModal from '../../components/login.modal';
-import {
-	SessionContext,
-	type SessionContextType,
-} from '../../contexts/session.context';
+import { signOut } from '../../contexts/slices/session.slice';
+import { type AppDispatch, type RootState } from '../../contexts/store';
 
 const layoutStyle = {
 	padding: 5,
@@ -65,7 +64,9 @@ export const SiteLayout: React.FC = () => {
 		React.useState<boolean>(false);
 	const [filteredItems, setFilteredItems] = useState<any[]>([]);
 
-	const { state, signOut } = useContext(SessionContext) as SessionContextType;
+	// const { state, signOut } = useContext(SessionContext) as SessionContextType;
+	const sessionState = useSelector((state: RootState) => state.sessionState);
+	const dispatch = useDispatch<AppDispatch>();
 
 	type MenuItem = Required<MenuProps>['items'][number];
 
@@ -100,7 +101,7 @@ export const SiteLayout: React.FC = () => {
 	];
 
 	React.useEffect(() => {
-		if (state.isAuthenticated) {
+		if (sessionState.isAuthenticated) {
 			// [... arr] yada {... obj} js de bir spread operatörü görüve görür. ve obje referanslarını koparır.
 			setFilteredItems([...items]);
 		} else {
@@ -110,8 +111,8 @@ export const SiteLayout: React.FC = () => {
 			// sıfırdan yepyeni bir dizi referansı verdik.
 		}
 
-		console.log('state-changed', state);
-	}, [state]); // state değişimin takip ettik. React da çok yaparız.
+		console.log('state-changed', sessionState);
+	}, [sessionState]); // state değişimin takip ettik. React da çok yaparız.
 
 	// button click sonrası sayfa redirect işlemlerinden sorumlu özel function, hook.
 	// func componentlerde component içerisi bir çok durum yönetim hook değimiz, özel functionlar ile yazılıyor.
@@ -149,7 +150,8 @@ export const SiteLayout: React.FC = () => {
 			extra: '⌘B',
 			onClick: () => {
 				// linke yönlen
-				signOut();
+				//signOut();
+				dispatch(signOut());
 			},
 		},
 	];
@@ -177,7 +179,7 @@ export const SiteLayout: React.FC = () => {
 						<Row>
 							<Col span={18}></Col>
 							<Col span={6} style={{ textAlign: 'right' }}>
-								{!state.isAuthenticated && (
+								{!sessionState.isAuthenticated && (
 									<Space
 										onClick={() => setVisibleLoginModal(true)}
 										style={{ padding: 5, cursor: 'pointer' }}
@@ -185,11 +187,11 @@ export const SiteLayout: React.FC = () => {
 										Oturum Aç
 									</Space>
 								)}
-								{state.isAuthenticated && ( // oturum açmışsak burası görünsün.
+								{sessionState.isAuthenticated && ( // oturum açmışsak burası görünsün.
 									<Dropdown menu={{ items: profileItems }}>
 										<a>
 											<Space>
-												{state.sub}
+												{sessionState.sub}
 												{/* oturum açan kişinin bilgisi */}
 												<DownOutlined />
 											</Space>

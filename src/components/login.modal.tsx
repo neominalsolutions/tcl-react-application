@@ -1,9 +1,7 @@
 import { Button, Form, Input, Modal } from 'antd';
-import { useContext } from 'react';
-import {
-	SessionContext,
-	type SessionContextType,
-} from '../contexts/session.context';
+import { useDispatch } from 'react-redux';
+import { signIn } from '../contexts/slices/session.slice';
+import type { AppDispatch } from '../contexts/store';
 
 type LoginModalProps = {
 	open: boolean;
@@ -14,7 +12,8 @@ function LoginModal(props: LoginModalProps) {
 	// and gelen bir form hook. formlar ile çalışmamızı sağlar
 	// form instance değişkeni.
 	const [loginForm] = Form.useForm();
-	const { signIn } = useContext(SessionContext) as SessionContextType;
+	// const { signIn } = useContext(SessionContext) as SessionContextType;
+	const dispatch = useDispatch<AppDispatch>();
 
 	return (
 		<>
@@ -39,7 +38,8 @@ function LoginModal(props: LoginModalProps) {
 						// apidan çekilen jwt -> login sonrası
 
 						// session state başlat
-						signIn(jwt);
+						// signIn(jwt);
+						dispatch(signIn({ jwt }));
 						props.dissmiss();
 					}}
 				>

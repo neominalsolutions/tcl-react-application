@@ -14,6 +14,8 @@ const initialState: SessionState = {
 	roles: [],
 };
 
+// UserSession_SignIN
+// UserSession_signOut
 const sessionSlice = createSlice({
 	name: 'UserSession', // STate ismi -> Redux Devtooltan stateleri ayırmak için
 	initialState: initialState,
