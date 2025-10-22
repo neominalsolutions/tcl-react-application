@@ -34,8 +34,12 @@ function LoginModal(props: LoginModalProps) {
 						// api post işlemi yapılacak.
 						console.log('formData', values);
 
+						const jwt =
+							'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30';
+						// apidan çekilen jwt -> login sonrası
+
 						// session state başlat
-						signIn('x343434');
+						signIn(jwt);
 						props.dissmiss();
 					}}
 				>
